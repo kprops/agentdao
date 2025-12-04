@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: grantify-mcp-server
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:http
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MCP_HTTP_PORT
+        value: 10000
+      - key: PYTHON_SERVICES_URL
+        sync: false
+      - key: PYTHON_API_KEY
+        sync: false

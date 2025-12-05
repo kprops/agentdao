@@ -2,7 +2,11 @@
 
 **AI-Powered Decentralized Grant Evaluation Platform**
 
+🚀 **Live Demo**: [https://grantify-neon.vercel.app](https://grantify-neon.vercel.app)
+
 Grantify revolutionizes grant funding through autonomous AI agent evaluation, combining blockchain transparency with intelligent decision-making. Five specialized AI agents collaborate to evaluate proposals across technical feasibility, ecosystem impact, team credibility, budget viability, and community sentiment.
+
+> **Note**: This README focuses on the **production deployment**. For local development setup, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local).
 
 ---
 
@@ -66,99 +70,76 @@ Grantify revolutionizes grant funding through autonomous AI agent evaluation, co
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Production Deployment
 
-### Prerequisites
+### Live Services
 
-- **Node.js** 18+ and npm/pnpm
-- **Python** 3.11+
-- **PostgreSQL** 15+
-- **Git**
-- **Ethereum Wallet** with Sepolia testnet ETH
+- **Frontend**: [https://grantify-neon.vercel.app](https://grantify-neon.vercel.app)
+- **Python Backend**: [https://agentdao.onrender.com](https://agentdao.onrender.com)
+- **MCP Server**: [https://agentdao-mcp-server.onrender.com](https://agentdao-mcp-server.onrender.com)
+- **Database**: Supabase PostgreSQL
+- **Blockchain**: Ethereum Sepolia Testnet
 
-### 1. Clone Repository
+### Deployment Architecture
+
+```
+┌─────────────────┐
+│  Vercel         │  Frontend (Next.js)
+│  grantify-neon  │  https://grantify-neon.vercel.app
+└────────┬────────┘
+         │
+         ├──────────────────────────────────┐
+         │                                   │
+┌────────▼────────┐              ┌──────────▼───────┐
+│ Render          │              │ Ethereum         │
+│ Python Services │              │ Sepolia Testnet  │
+│ agentdao        │              │ Smart Contracts  │
+└────────┬────────┘              └──────────────────┘
+         │
+┌────────▼────────┐
+│ Render          │
+│ MCP Server      │
+│ agentdao-mcp    │
+└────────┬────────┘
+         │
+┌────────▼────────┐
+│ Supabase        │
+│ PostgreSQL DB   │
+└─────────────────┘
+```
+
+### Smart Contract Addresses (Sepolia)
+
+```
+GrantRegistry:  0x6d77f3a5dcad33cbEbf431Fee6F67E5930148D17
+GrantTreasury:  0x71C74477ae190d7eeF762d01AC091D021a5AbAa6
+AgentVoting:    0x19Fe9e5e12fc5C1657E299aC69878965367A294D
+```
+
+### Local Development Setup
+
+**Want to run Grantify locally?** Switch to the `local` branch for full development setup:
 
 ```bash
 git clone https://github.com/pryyyynz/agentdao.git
 cd agentdao
+git checkout local
 ```
 
-### 2. Database Setup
+See the [`local` branch README](https://github.com/pryyyynz/agentdao/tree/local) for:
+- Local environment setup
+- Database installation and migrations
+- Smart contract deployment to local testnet
+- Service configuration and API keys
+- Development workflow
 
-```bash
-# Install PostgreSQL and create database
-createdb grantify
+### Using the Production Platform
 
-# Run migrations
-cd database/migrations
-python run_migration.py
-```
-
-📖 [Database Setup Guide →](database/README.md)
-
-### 3. Smart Contracts
-
-```bash
-cd smart-contracts
-npm install
-cp .env.example .env
-# Edit .env with your keys
-
-# Deploy to Sepolia testnet
-npm run deploy:sepolia
-```
-
-📖 [Smart Contracts Documentation →](smart-contracts/README.md)
-
-### 4. Python Services
-
-```bash
-cd python-services
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1  # Windows
-source .venv/bin/activate      # Linux/Mac
-
-pip install -r requirements.txt
-cp .env.example .env
-# Edit .env with API keys and database URL
-
-# Run server
-uvicorn main:app --reload --port 8000
-```
-
-📖 [Python Services Documentation →](python-services/README.md)
-
-### 5. MCP Server
-
-```bash
-cd mcp-server
-npm install
-cp .env.example .env
-# Edit .env
-
-npm run dev:http
-```
-
-📖 [MCP Server Documentation →](mcp-server/README.md)
-
-### 6. Frontend
-
-```bash
-cd frontend
-npm install
-cp .env.example .env.local
-# Edit .env.local with contract addresses
-
-npm run dev
-```
-
-📖 [Frontend Documentation →](frontend/README.md)
-
-### 7. Access Application
-
-- **Frontend**: http://localhost:3000
-- **Python API**: http://localhost:8000/docs
-- **MCP Server**: http://localhost:3100
+1. **Visit**: [https://grantify-neon.vercel.app](https://grantify-neon.vercel.app)
+2. **Connect Wallet**: MetaMask on Sepolia testnet
+3. **Submit Grant**: Complete the multi-step form
+4. **Track Progress**: View agent evaluations in real-time
+5. **Get Results**: Receive email notification with decision
 
 ---
 
@@ -196,36 +177,57 @@ Measures community support, engagement, and grassroots backing.
 
 ---
 
-## 🔑 Environment Variables
+## 🔑 Production Configuration
 
-Each component requires specific environment variables. See:
-- [`frontend/.env.example`](frontend/.env.example)
-- [`python-services/.env.example`](python-services/.env.example)
-- [`mcp-server/.env.example`](mcp-server/.env.example)
-- [`smart-contracts/.env.example`](smart-contracts/.env.example)
-- [`typescript-agents/.env.example`](typescript-agents/.env.example)
+### Key Environment Variables
+
+The production deployment uses the following configuration:
+
+**Frontend (Vercel)**:
+```env
+NEXT_PUBLIC_API_URL=https://agentdao.onrender.com
+NEXT_PUBLIC_THIRDWEB_CLIENT_ID=[configured]
+NEXT_PUBLIC_GRANT_REGISTRY_ADDRESS=0x6d77f3a5dcad33cbEbf431Fee6F67E5930148D17
+NEXT_PUBLIC_GRANT_TREASURY_ADDRESS=0x71C74477ae190d7eeF762d01AC091D021a5AbAa6
+NEXT_PUBLIC_AGENT_VOTING_ADDRESS=0x19Fe9e5e12fc5C1657E299aC69878965367A294D
+```
+
+**Backend (Render)**:
+```env
+DATABASE_URL=[Supabase PostgreSQL]
+GROQ_API_KEY=[configured]
+CORS_CUSTOM_ORIGINS=https://grantify-neon.vercel.app
+RESEND_FROM_EMAIL=onboarding@resend.dev
+MCP_SERVER_URL=https://agentdao-mcp-server.onrender.com
+```
+
+**MCP Server (Render)**:
+```env
+PYTHON_SERVICES_URL=https://agentdao.onrender.com
+PYTHON_API_KEY=[configured]
+```
+
+For local development configuration, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local).
 
 ---
 
 ## 🧪 Testing
 
-```bash
-# Smart contracts
-cd smart-contracts
-npm test
+**Production**: The live platform is fully tested and operational.
 
-# Python services
-cd python-services
-pytest
+**Local Testing**: For running tests locally, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local) which includes:
+- Unit tests for all services
+- Integration test suites
+- Smart contract test scripts
+- End-to-end testing guide
 
-# TypeScript agents
-cd typescript-agents
-npm test
-
-# MCP server
-cd mcp-server
-npm test
-```
+Production test coverage:
+- ✅ Smart contract deployment and verification
+- ✅ Multi-agent evaluation pipeline
+- ✅ Blockchain voting mechanism
+- ✅ Email notification system
+- ✅ Milestone-based payments
+- ✅ Admin controls and emergency procedures
 
 ---
 
